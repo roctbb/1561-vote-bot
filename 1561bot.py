@@ -21,8 +21,6 @@ except:
         "users": {}
     }
 
-    print(state)
-
 
 def safe_send(to, m, keyboard=None):
     try:
@@ -34,7 +32,6 @@ def safe_send(to, m, keyboard=None):
 def save():
     try:
         with open('state.json', 'w') as f:
-            print(state)
             f.write(json.dumps(state))
     except Exception as e:
         print("save error", e)
@@ -152,7 +149,8 @@ def process_message(message):
 
     save()
 
-try:
-    bot.polling(none_stop=True)
-except Exception as e:
-    print("General exception:", e)
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        print("General exception:", e)
