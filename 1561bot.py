@@ -81,7 +81,7 @@ def make_money_keyboard(money_count):
 def make_voting(message):
     if state["users"][str(message.from_user.id)]["balance"] > 0:
         state["users"][str(message.from_user.id)]["state"] = "project"
-        safe_send(message.chat.id, "Выбери проект, закоторый хочешь проголосовать 👀.", make_projects_keyboard())
+        safe_send(message.chat.id, "Выбери проект, за который хочешь проголосовать 👀.", make_projects_keyboard())
     else:
         state["users"][str(message.from_user.id)]["state"] = "finished"
         safe_send(message.chat.id, "Спасибо за участие в голосовании! Ты вложил все свои монеты! 🙌")
