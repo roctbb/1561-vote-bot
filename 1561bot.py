@@ -101,6 +101,9 @@ def start(message):
     make_voting(message)
     save()
 
+@bot.message_handler(commands=['alive'])
+def alive(message):
+    safe_send(message.chat.id, "yep.")
 
 @bot.message_handler(content_types=['text'])
 def process_message(message):
