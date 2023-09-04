@@ -81,7 +81,7 @@ def make_money_keyboard(money_count):
 def make_voting(message):
     if state["users"][str(message.from_user.id)]["balance"] > 0:
         state["users"][str(message.from_user.id)]["state"] = "project"
-        safe_send(message.chat.id, "Укажи номер фотографии, за которую хочешь проголосовать 👀.", None)
+        safe_send(message.chat.id, "Выбери проект, за который хочешь проголосовать 👀.", make_projects_keyboard())
     else:
         state["users"][str(message.from_user.id)]["state"] = "finished"
         safe_send(message.chat.id, "Спасибо за участие в голосовании! Ты вложил все свои монеты! 🙌")
@@ -92,9 +92,11 @@ def make_voting(message):
 def start(message):
     init_user(message)
 
-    safe_send(message.chat.id, f"""Привет! Этот бот поможет тебе проголосовать за летнюю фотографию от учеников нашей школы 🤓. 
+    safe_send(message.chat.id, f"""Привет! Этот бот поможет тебе проинвестировать в один из социальных проектов, предложенных 10ми классами нашей школы 🤓. 
     
-Сейчас у тебя 💸 {state["users"][str(message.from_user.id)]["balance"]} монет. Ты можешь выбрать любимую фотографию и вложить сразу все монеты или распределить свой капитал между несколькими.""")
+Сейчас у тебя 💸 {state["users"][str(message.from_user.id)]["balance"]} монет. Ты можешь выбрать любимый проект и вложить в него сразу все монеты или распределить свой капитал между несколькими.
+                               
+Проекты с наибольшим финансироваем получат поддержку от администрации ✊.""")
 
     make_voting(message)
     save()
@@ -117,11 +119,11 @@ def process_message(message):
             if money_count > 0:
                 state["users"][str(message.from_user.id)]["state"] = "money"
                 state["users"][str(message.from_user.id)]["chosen"] = answer
-                safe_send(message.chat.id, f'Сейчас у тебя 💸 {money_count} монет. Сколько хочешь отдать фотографии {answer}?', make_money_keyboard(money_count))
+                safe_send(message.chat.id, f'Сейчас у тебя 💸 {money_count} монет. Сколько хочешь проинвестировать в проект {answer}?', make_money_keyboard(money_count))
             else:
                 safe_send(message.chat.id, "Монеты закончились.")
         else:
-            safe_send(message.chat.id, "Выбери номер фотографии...", None)
+            safe_send(message.chat.id, "Выбери номер проекта...", keyboard=make_projects_keyboard())
 
     elif state["users"][str(message.from_user.id)]["state"] == "money":
         answer = answer.lstrip("💸 ")
@@ -134,7 +136,7 @@ def process_message(message):
 
             state["users"][str(message.from_user.id)]["balance"] -= int(answer)
 
-            safe_send(message.chat.id, "Расскажи, чем тебе понравилась эта фотография? Что хотелось бы передать авторам? Ответ напиши одним сообщением... 🖌", types.ReplyKeyboardRemove())
+            safe_send(message.chat.id, "Расскажи, чем тебе понравилась эта идея? Что хотелось бы передать авторам? Ответ напиши одним сообщением... 🖌", types.ReplyKeyboardRemove())
         else:
             make_voting(message)
 
